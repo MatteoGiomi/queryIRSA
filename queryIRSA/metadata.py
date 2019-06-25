@@ -353,10 +353,20 @@ class metaDB:
         else:
             try:
                 if len(time)==2:
-                    start, end=time[0].jd, time[1].jd
+                    
+                    # you can have None to leave open time interval bounds
+                    time[0] = Time('2016-01-01') if time[0] is None else time[0]
+                    time[1] = Time('2026-01-01') if time[1] is None else time[1]
+                    
+                    # convert to astropy objects
+                    tstart = Time(time[0]) if type(time[0])==str else time[0]
+                    tstop = Time(time[1]) if type(time[1])==str else time[1]
+                    
+                    # query using jds
+                    start, end= tstart.jd, tstop.jd
                     querystr+="&WHERE=obsjd+BETWEEN+%.5f+AND+%.5f"%(start, end)
                     self.logger.info("querying IRSA for data taken between %s (%.5f) and %s (%.5f)"%(
-                        time[0].iso, start, time[1].iso, end))
+                        tstart.iso, start, tstop.iso, end))
             except:
                 self.logger.exception(
                     "time argument has to astropy.Quantity`,`astropy.time.Time`, a list of them, or None.",
