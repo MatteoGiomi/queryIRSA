@@ -15,7 +15,6 @@ from astropy.time import Time
 import astropy.units as u
 import concurrent.futures
 
-
 import logging
 module_logger=logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
@@ -375,16 +374,6 @@ class metaDB:
         # prepend paths, append format, and download
         full_query = "%s/%s/%s&ct=csv"%(conf.meta_url, self.type, querystr)
         return url_to_df(full_query)
-#    logger.info("downloading metadata using IRSA query: %s"%querystr)
-#    tmpfile=os.path.join("/tmp/getmeta_ra%.3f_dec%.3f.tbl"%(ra, dec))
-#    load_file(url+querystr, outf=tmpfile, auth=(user, pwd), showpbar=True)
-#    
-#    # read metadata table and get the files
-#    mtab=pd.read_csv(tmpfile, engine='c')
-#    logger.info("found %d entries in metadata table"%len(mtab))
-#    return mtab
-
-
 
     def download(self, what, where, product="psfcat", overwrite=False, dry=False, check=True, n_workers=8, chunks=1024):
         """
